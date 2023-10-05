@@ -168,8 +168,28 @@ Define the number of result per page in the search pages.
  
 ### EMSCO_THEME_COLOR
 
-The color of the skin. The available skins can be found in the [EMSCoreBundle skin folder](https://github.com/ems-project/EMSCoreBundle/tree/master/assets/skins).
- - Default `blue`
+The color of the theme.
+ * Default `blue`
+ * Possible values:
+   * `blue`
+   * `indigo`
+   * `purple`
+   * `pink`
+   * `red`
+   * `orange`
+   * `yellow`
+   * `green`
+   * `teal`
+   * `cyan`
+   * `white`
+   * `gray`
+   * `black`
+   * `lightblue`
+   * `navy`
+   * `fuchsia`
+   * `maroon`
+   * `lime`
+   * `olive`
  
 ### EMSCO_DATE_TIME_FORMAT
 
@@ -391,6 +411,10 @@ Can fine tune the ems_weblize twig filter by adjusting the regex used to replace
 ### EMS_STORE_DATA_SERVICES
 
 Define (JSON format) the store data services, in the priority order. See the [Stora Data documentation](../recipes/store-data.md) for more details. Default value `[{"type":"db"}]`
+
+### EMS_EXCLUDED_CONTENT_TYPES
+
+Define (JSON format) a list of content type names to exclude from admin backup/restore commands. Example: `["route","template","template_ems","label"]`. Default value `[]`
 
 ## Elasticms Form Bundle variables
 

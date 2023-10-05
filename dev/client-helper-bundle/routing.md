@@ -79,9 +79,11 @@ And in the redirect_favicon.json.twig template:
 ````
 
 The template's response should be a JSON containing those optional parameters:
-- `url`: the target url to redirect to
+- `path`: path for returning BinaryFileResponse
+- `url`: the target url to redirect to, required if path is not defined
 - `status`: the HTTP return's code. Default value: 302
 - `message`: A 404 message. Default value 'Page not found'
+- `headers`: array for defining the response headers
 
 If the url parameter is not defined, the controller will throw a 404 with the message parameter.
 
@@ -106,6 +108,40 @@ Instead of redirecting via an HTTP redirect response you can also directly retur
 ````
 
 In this previous example we assume that a call to the `emsch_assets_version` function has been made in the `template/variables.twig` template.
+
+
+This controller can also be used to redirected to another controller (as a subrequest). 
+In this example we internally redirect a route into the FileController in order to exploit to range headers for a media file content type.
+
+```yaml
+emsch_media_file:
+    config:
+        path: '/media-files{path}'
+        requirements: { path: .+ }
+        controller: 'emsch.controller.router::redirect'
+    query: '{"query":{"bool":{"must":[{"terms":{"_contenttype":["media_file"]}},{"terms":{"media_path":["%path%"]}}]}},"size":1}'
+```
+
+```twig
+{%- block request %}
+    {% apply spaceless %}
+        {{ {
+            controller: 'EMS\\CommonBundle\\Controller\\FileController::resolveAsset',
+            path: {
+               fileField: source.media_file,
+            },
+        }|json_encode|raw }}
+    {% endapply %}
+{% endblock request -%}
+```
+
+This redirect may take 3 parameters:
+
+ * `controller`: string identifying the controller where the request must be redirected. This parameter is mandatory.
+ * `path`: associative array containing the named parameters to pass to the controller's method. Default value `[]`.
+ * `query`: associative array containing the non-mandatory parameters (such those passed via the request to the controller). Default value `[]`.
+
+
 
 ### Search controller
 
